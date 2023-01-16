@@ -74,7 +74,7 @@
                         </form>
                     </div>
                 </div>
-                <button class="btn btn-danger">Delete</button>
+                <a class="btn btn-danger" href="{{ route('user.delete', ['user_id' => $user->user_id]) }}">Delete</a>
             </td>
         </tr>
         @empty

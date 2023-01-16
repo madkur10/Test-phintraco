@@ -20,9 +20,9 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-         $validated = $request->validate([
+        $validated = $request->validate([
             'name' => 'required|min:4',
-            'email' => 'required|min:4|max:20',
+            'email' => 'required|min:4',
             'password' => 'required|min:4',
             'role' => 'required',
         ]);
@@ -51,7 +51,7 @@ class UsersController extends Controller
          $validated = $request->validate([
             'user_id' => 'required',
             'name' => 'required|min:4',
-            'email' => 'required|min:4|max:20',
+            'email' => 'required|min:4',
             'password' => 'required|min:4',
             'role' => 'required',
         ]);
@@ -61,17 +61,28 @@ class UsersController extends Controller
         $email = $validated['email'];
         $password = $validated['password'];
         $role = $validated['role'];
-        $role = $validated['role'];
         
         $session_user_id = Auth::user()->user_id;
 
-        $insert_user = User::where('user_id', $user_id)->update([
+        $update_user = User::where('user_id', $user_id)->update([
             'name' => $name,
             'email' => $email,
             'password' => $password,
             'role' => $role,
             'updated_by' => $session_user_id,
             'updated_at' => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect()->route('users');
+    }
+
+    public function destroy(Request $request) 
+    {
+        $user_id = $request['user_id'];
+        $session_user_id = Auth::user()->user_id;
+        $destroy_user = User::where('user_id', $user_id)->update([
+            'deleted_by' => $session_user_id,
+            'deleted_at' => date('Y-m-d H:i:s')
         ]);
 
         return redirect()->route('users');
